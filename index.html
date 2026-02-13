@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine? 💘</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      padding: 40px 30px;
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+      max-width: 520px;
+      width: 92%;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 12px;
+      color: #ff2d55;
+    }
+
+    p {
+      margin: 0;
+      color: #333;
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }
+
+    #yesBtn {
+      background: #ff2d55;
+      color: white;
+      font-weight: bold;
+    }
+
+    #noBtn {
+      background: #444;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Cry section */
+    .cryWrap {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cryText {
+      font-size: 1.2rem;
+      color: #ff2d55;
+      font-weight: 800;
+    }
+
+    .gif {
+      width: 180px;
+      max-width: 70%;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    /* Gift section */
+    .giftTitle {
+      font-size: 1.8rem;
+      color: #ff2d55;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .giftSub {
+      margin-bottom: 22px;
+      font-size: 1.05rem;
+      color: #333;
+    }
+
+    .giftGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .giftBox {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      cursor: pointer;
+      transition: transform 0.18s ease;
+      border: 2px solid rgba(255,45,85,0.15);
+    }
+
+    .giftBox:hover {
+      transform: scale(1.06);
+    }
+
+    .giftEmoji {
+      font-size: 3rem;
+      margin-bottom: 6px;
+    }
+
+    .giftLabel {
+      font-weight: 700;
+      color: #444;
+    }
+
+    @media (max-width: 520px) {
+      .giftGrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===========================
+       SLIDE PANELS (Gift 1,2,3)
+       =========================== */
+
+    .slidePanel {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+
+      transform: translateX(100%);
+      transition: transform 0.55s ease;
+    }
+
+    .slidePanel.active {
+      transform: translateX(0%);
+    }
+
+    /* Gift 1 panel theme */
+    #panel1 {
+      background: #40826d; /* viridian green */
+    }
+
+    /* Gift 2 panel theme */
+    #panel2 {
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    }
+
+    /* Gift 3 panel theme */
+    #panel3 {
+      background: linear-gradient(135deg, #ffd6e8, #fff1f7);
+    }
+
+    .slideContent {
+      max-width: 760px;
+      width: 95%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 24px;
+      padding: 26px 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .slideTitle {
+      color: white;
+      font-size: 1.9rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    /* Polaroid */
+    .polaroid {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 14px 22px;
+      width: min(320px, 90%);
+      margin: 0 auto 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      transform: rotate(-2deg);
+    }
+
+    .polaroid img {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .polaroidCaption {
+      margin-top: 12px;
+      font-weight: 800;
+      color: #333;
+      font-size: 1.05rem;
+    }
+
+    /* Gift 2 images */
+    .gift2Grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .gift2Item {
+      background: rgba(255,255,255,0.92);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    .gift2Item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .gift2Label {
+      margin-top: 10px;
+      font-weight: 900;
+      color: #ff2d55;
+      font-size: 1.1rem;
+    }
+
+    /* ===========================
+       GIFT 3 CARD (white curved)
+       =========================== */
+
+    .gift3Card {
+      position: relative;
+      background: rgba(255,255,255,0.95);
+      border-radius: 28px;
+      padding: 26px 22px;
+      max-width: 520px;
+      width: 92%;
+      margin: 0 auto;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+      text-align: left;
+      overflow: hidden;
+      animation: popIn 0.35s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .gift3Heading {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #ff2d55;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .gift3Paragraph {
+      font-size: 1.05rem;
+      color: #333;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    /* Flower attached to corner */
+    .cornerFlower {
+      position: absolute;
+      top: -18px;
+      right: -14px;
+      width: 95px;
+      transform: rotate(18deg);
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.18));
+      pointer-events: none;
+    }
+
+    .slideText {
+      color: white;
+      font-size: 1.1rem;
+      line-height: 1.45;
+      margin-top: 10px;
+      font-weight: 700;
+    }
+
+    .closeBtn {
+      margin-top: 18px;
+      background: white;
+      color: #333;
+      font-weight: 900;
+      border-radius: 14px;
+      padding: 12px 22px;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s ease;
+    }
+
+    .closeBtn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 650px) {
+      .gift2Grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gift2Item img {
+        height: 200px;
+      }
+
+      .cornerFlower {
+        width: 82px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MAIN SCREEN -->
+  <div class="card" id="mainCard">
+    <h1>Will you be my Valentine? 💘</h1>
+    <p>(No pressure… but also yes pressure 😭)</p>
+
+    <div class="buttons">
+      <button id="yesBtn">YES 💖</button>
+      <button id="noBtn">NO 🙃</button>
+    </div>
+
+    <!-- Crying GIF area -->
+    <div class="cryWrap hidden" id="cryWrap">
+      <div class="cryText">Pleaseee say yes 😭</div>
+      <img
+        class="gif"
+        alt="Crying gif"
+        src="https://media.giphy.com/media/ROF8OQvDmxytW/giphy.gif"
+      />
+    </div>
+  </div>
+
+  <!-- GIFT SCREEN -->
+  <div class="card hidden" id="giftCard">
+    <div class="giftTitle">YAYYYYY 😭💘</div>
+    <div class="giftSub">Okay now pick a gift box 🎁</div>
+
+    <div class="giftGrid">
+      <div class="giftBox" data-gift="1">
+        <div class="giftEmoji">🎁</div>
+        <div class="giftLabel">Gift Box 1</div>
+      </div>
+
+      <div class="giftBox" data-gift="2">
+        <div class="giftEmoji">🎁</div>
+        <div class="giftLabel">Gift Box 2</div>
+      </div>
+
+      <div class="giftBox" data-gift="3">
+        <div class="giftEmoji">🎁</div>
+        <div class="giftLabel">Gift Box 3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 1 (Gift 1) -->
+  <div class="slidePanel" id="panel1">
+    <div class="slideContent">
+      <div class="slideTitle">Gift Box 1 opened 💚</div>
+
+      <div class="polaroid">
+        <img
+          src="./ed0201c8-7c31-4ee8-8f68-18b982c4f699.jpg"
+          alt="Polaroid photo"
+        />
+        <div class="polaroidCaption">Us, but make it forever 😭💘</div>
+      </div>
+
+      <div class="slideText">
+        I don’t know what the future looks like…  
+        but I know I want you in it. 💚
+      </div>
+
+      <button class="closeBtn" data-close="panel1">Back 🎁</button>
+    </div>
+  </div>
+
+  <!-- PANEL 2 (Gift 2) -->
+  <div class="slidePanel" id="panel2">
+    <div class="slideContent">
+      <div class="slideTitle">Gift Box 2 opened 💕</div>
+
+      <div class="slideText">
+        I got you flowers and cupcake 😭💘
+      </div>
+
+      <div class="gift2Grid">
+        <div class="gift2Item">
+          <img
+            src="./62f58d93-341c-47b4-9ff7-bf6b91b79354.jpg"
+            alt="Flowers"
+          />
+          <div class="gift2Label">Flowers 💐</div>
+        </div>
+
+        <div class="gift2Item">
+          <img
+            src="./image.png"
+            alt="Cupcake"
+          />
+          <div class="gift2Label">Ice-Cream 🍦🍦</div>
+        </div>
+      </div>
+
+      <button class="closeBtn" data-close="panel2">Back 🎁</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3 (Gift 3) -->
+  <div class="slidePanel" id="panel3">
+    <div class="slideContent">
+      <div class="gift3Card">
+
+        <!-- Flower decoration -->
+        <img
+          class="cornerFlower"
+          src="./—Pngtree—flowers_9445663.png"
+          alt="Corner flower"
+        />
+
+        <div class="gift3Heading">Gift Box 3 💌</div>
+
+        <div class="gift3Paragraph">
+          I just want you to know something simple.  
+          Being around you makes everything feel lighter, calmer, and better.
+          <br><br>
+          I love the way you exist, the way you talk, the way you laugh,
+          and the way you make even normal moments feel special.
+          <br><br>
+          So this isn’t just a Valentine thing…  
+          it’s a “I choose you” thing. 💘
+        </div>
+      </div>
+
+      <button class="closeBtn" data-close="panel3">Back 🎁</button>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    const mainCard = document.getElementById("mainCard");
+    const giftCard = document.getElementById("giftCard");
+
+    const cryWrap = document.getElementById("cryWrap");
+
+    const panel1 = document.getElementById("panel1");
+    const panel2 = document.getElementById("panel2");
+    const panel3 = document.getElementById("panel3");
+
+    // NO button: show crying gif + text only
+    noBtn.addEventListener("click", () => {
+      cryWrap.classList.remove("hidden");
+
+      const noMessages = [
+        "NO 🙃",
+        "pls 😭",
+        "say yes 🥺",
+        "COME ONNN 😩",
+        "okay stop 😭"
+      ];
+
+      const current = noBtn.textContent.trim();
+      const idx = noMessages.indexOf(current);
+      noBtn.textContent = noMessages[Math.min(idx + 1, noMessages.length - 1)];
+    });
+
+    // YES button: go to gift screen
+    yesBtn.addEventListener("click", () => {
+      mainCard.classList.add("hidden");
+      giftCard.classList.remove("hidden");
+    });
+
+    // Gift boxes click
+    document.querySelectorAll(".giftBox").forEach((box) => {
+      box.addEventListener("click", () => {
+        const gift = box.getAttribute("data-gift");
+
+        if (gift === "1") panel1.classList.add("active");
+        if (gift === "2") panel2.classList.add("active");
+        if (gift === "3") panel3.classList.add("active");
+      });
+    });
+
+    // Close buttons
+    document.querySelectorAll("[data-close]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const panelId = btn.getAttribute("data-close");
+        document.getElementById(panelId).classList.remove("active");
+      });
+    });
+
+    // Click outside closes panels
+    [panel1, panel2, panel3].forEach((panel) => {
+      panel.addEventListener("click", (e) => {
+        if (e.target === panel) panel.classList.remove("active");
+      });
+    });
+  </script>
+
+</body>
+</html>
